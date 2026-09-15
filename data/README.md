@@ -19,7 +19,7 @@ This directory holds the dataset(s) used in the research project:
 | **Source** | Kaggle |
 | **Original URL** | https://www.kaggle.com/datasets/adityakadiwal/water-potability |
 | **License** | CC0: Public Domain |
-| **Download Date** | September 2026 |
+
 | **Number of Samples** | 3,276 |
 | **Number of Features** | 9 physicochemical features + 1 binary target |
 | **Target Variable** | `Potability` (0 = not potable, 1 = potable) |
@@ -132,4 +132,4 @@ If an appropriate secondary public dataset becomes available with compatible fea
 
 ---
 
-*Last updated: September 2026*
+

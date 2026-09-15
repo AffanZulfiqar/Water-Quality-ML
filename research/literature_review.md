@@ -1,7 +1,7 @@
 # Literature Review: Machine Learning for Water Quality Assessment
 
 **Project:** Explainable and Robust Machine Learning for Water Quality Assessment and Reduced-Parameter Monitoring  
-**Date Compiled:** September 2026  
+
 **Search Period Covered:** 2018–2026 (with key older foundational works included)
 
 ---

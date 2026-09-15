@@ -268,11 +268,11 @@ water-quality-ml/
 If you use this code or research in your work:
 
 ```bibtex
-@misc{waterqualityml2026,
+@misc{waterqualityml,
   title  = {Explainable and Robust Machine Learning for Water Quality Assessment
             and Reduced-Parameter Monitoring},
   author = {[Author Name]},
-  year   = {2026},
+  year   = {},
   url    = {[repository URL]}
 }
 ```
@@ -285,4 +285,4 @@ This project uses the Water Potability dataset released by Aditya Kadiwal on Kag
 
 ---
 
-*Last updated: September 2026*
+
