@@ -21,9 +21,8 @@ A complete, reproducible research project investigating machine learning for dri
 
 ## Dataset
 
-**Water Quality and Potability** — Kadiwal (2021), Kaggle  
+**Water Quality and Potability** — Kaggle (Kadiwal, A. 2021)  
 License: CC0 Public Domain  
-URL: https://www.kaggle.com/datasets/adityakadiwal/water-potability
 
 | Property | Value |
 |----------|-------|

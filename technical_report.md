@@ -6,7 +6,7 @@
 ## A. Dataset Selected
 
 **Dataset:** Water Quality and Potability (Kadiwal, 2021)  
-**Source:** Kaggle — https://www.kaggle.com/datasets/adityakadiwal/water-potability  
+**Source:** Kaggle (Kadiwal, A. *Water Quality and Potability*. Kaggle, 2021)  
 **License:** CC0 Public Domain  
 
 ### Why this dataset?
@@ -31,7 +31,7 @@
 - Evaluates noise robustness for air quality and general environmental ML
 
 ### What this project investigates:
-This study integrates model benchmarking, SHAP analysis, feature ablation, and noise robustness evaluation within a unified experimental framework. It aims to provide a reproducible, leakage-free benchmark for the widely used Kaggle potability dataset, while exploring the consistency of SHAP-derived feature importances and the specific degradation of tree ensembles under multiplicative measurement noise.
+This study integrates model benchmarking, SHAP analysis, feature ablation, and noise robustness evaluation within a unified experimental framework. It aims to provide a reproducible, leakage-free benchmark for the widely used Kaggle potability dataset, while exploring the consistency of SHAP-derived feature importances and the sensitivity of tree ensembles to multiplicative measurement noise.
 
 ---
 
@@ -62,17 +62,18 @@ This study integrates model benchmarking, SHAP analysis, feature ablation, and n
 ### Models
 Dummy, Logistic Regression, Decision Tree, Random Forest, SVM, XGBoost, MLP.
 
-### Evaluation
-- 5-fold Stratified K-Fold CV
-- Primary metric: **Macro F1** (class imbalance-robust)
-- Secondary metrics: ROC-AUC, PR-AUC, Accuracy (reported with caveats regarding imbalance)
+### Evaluation Protocol
+- **Model selection:** 5-fold stratified cross-validation on the training partition.
+- **Final evaluation:** One-time evaluation on the held-out test partition.
+- **Primary metric:** **Macro F1** (class imbalance-robust)
+- **Secondary metrics:** ROC-AUC, PR-AUC, Accuracy (reported with caveats regarding imbalance)
 
 ### SHAP Analysis
 - KernelSHAP for generalized feature importance; TreeSHAP for ensemble models.
 - Global: mean \|SHAP\| per feature used for establishing the baseline feature ranking. Crucially, this ranking was derived strictly from the **training data** to prevent test-set selection bias (data leakage) in subsequent ablation experiments.
 
 ### Feature Ablation (RQ3)
-Using the feature ranking derived from the training-set SHAP analysis, models were retrained from scratch on 5 configurations (All, Top-7, Top-5, Top-3, Low-cost). 
+Using the feature ranking derived from the training-set SHAP analysis, models were retrained from scratch on 5 configurations (All, Top-7, Top-5, Top-3, 2-Feature). 
 
 ### Noise Robustness (RQ4)
 Multiplicative Gaussian noise at {0%, 2%, 5%, 10%, 15%} applied to test features. 5 random repetitions per level; results averaged.
@@ -98,7 +99,7 @@ After evaluating all models on the held-out test set, given the noisy nature of 
 
 ## F. Explainability Findings
 
-Using KernelSHAP, we extracted the most globally important features for the linear and neural baseline models. 
+Using SHAP, we examined global feature importance for Logistic Regression, MLP, and tree-based models. 
 
 For the linear baseline (Logistic Regression), the top 5 most important features were:
 1. **Solids (TDS-related measure)** 
@@ -123,7 +124,7 @@ We systematically reduced the number of features provided to the Random Forest m
 | **B: Top 7** | 7 | **0.6514** | 0.6881 | 101% |
 | **C: Top 5** | 5 | 0.6294 | 0.6818 | 97.6% |
 | **D: Top 3** | 3 | 0.5633 | 0.5908 | 87.4% |
-| **E: Low-Cost** | 2 (pH, Turbidity) | 0.4452 | 0.4458 | 69.1% |
+| **E: 2-Feature** | 2 (pH, Turbidity) | 0.4452 | 0.4458 | 69.1% |
 
 **Conclusion:** 
 The Top-7 configuration achieved a slightly higher Macro F1 than the full feature set (0.6514 vs. 0.6444), although its ROC-AUC was slightly lower (0.6881 vs. 0.6992). The Top-5 configuration achieved a Macro F1 of 0.6294, corresponding to approximately 97.6% of the full-feature Macro F1 while reducing the input variables from nine to five. These results suggest that some feature reduction may be possible without a large loss in predictive performance. However, the experiment does not directly establish sensor-cost savings or field-level monitoring performance.
@@ -132,22 +133,32 @@ The Top-7 configuration achieved a slightly higher Macro F1 than the full featur
 
 ## H. Robustness Findings
 
-We applied simulated Gaussian multiplicative measurement noise (0% to 15%) to the test set features to simulate real-world hardware variance:
+We applied simulated Gaussian multiplicative measurement noise (0% to 15%) to the test set features to simulate variance. Results are presented as Mean ± Standard Deviation across 5 random repetitions:
 
 | Noise Level | Random Forest | XGBoost | Logistic Regression | SVM |
 |-------------|---------------|---------|----------------------|-----|
-| **0% (Clean)** | 0.6444 | 0.6320 | 0.5097 | 0.6043 |
-| **2% Noise** | 0.6486 | 0.6350 | 0.5117 | 0.6009 |
-| **5% Noise** | 0.6552 | 0.6338 | 0.5092 | 0.6016 |
-| **10% Noise** | 0.6576 | 0.6352 | 0.5056 | 0.5996 |
-| **15% Noise** | 0.6494 | 0.6390 | 0.5022 | 0.5980 |
+| **0% (Clean)** | 0.6444 ± 0.0000 | 0.6320 ± 0.0000 | 0.5097 ± 0.0000 | 0.6043 ± 0.0000 |
+| **2% Noise** | 0.6486 ± 0.0071 | 0.6350 ± 0.0076 | 0.5117 ± 0.0012 | 0.6009 ± 0.0019 |
+| **5% Noise** | 0.6552 ± 0.0069 | 0.6338 ± 0.0057 | 0.5092 ± 0.0042 | 0.6016 ± 0.0049 |
+| **10% Noise** | 0.6576 ± 0.0079 | 0.6352 ± 0.0037 | 0.5056 ± 0.0047 | 0.5996 ± 0.0041 |
+| **15% Noise** | 0.6494 ± 0.0069 | 0.6390 ± 0.0056 | 0.5022 ± 0.0049 | 0.5980 ± 0.0063 |
 
 **Conclusion:** 
 Random Forest and XGBoost showed relatively stable Macro F1 under the simulated multiplicative-noise conditions. Random Forest increased from 0.6444 at 0% noise to 0.6576 at 10% noise before decreasing to 0.6494 at 15%, while XGBoost remained within a relatively narrow range across the tested noise levels. These results indicate limited sensitivity to the specific simulated noise model used in this experiment; they should not be interpreted as evidence of robustness to real-world sensor errors.
 
 ---
 
-## I. Research Contribution and Limitations
+## I. Overall Findings
+
+Across the evaluated models, Random Forest achieved the highest Macro F1 (0.6444) and ROC-AUC (0.6992) on the held-out test set. SHAP analysis identified different feature-importance patterns across model families, reinforcing that model interpretation is dependent on the learned predictive structure.
+
+Feature ablation showed that reducing the input space from nine to five variables resulted in a Macro F1 of 0.6294, corresponding to 97.6% of the full-feature Macro F1. Under the specified multiplicative-noise experiment, Random Forest and XGBoost maintained relatively stable performance across noise levels up to 15%.
+
+Taken together, the experiments demonstrate a reproducible framework for evaluating predictive performance, interpretability, feature reduction, and sensitivity to simulated measurement noise on this dataset. The findings should be interpreted as dataset-specific evidence rather than as validation of real-world water-monitoring systems.
+
+---
+
+## J. Research Contribution and Limitations
 
 ### Research Contribution
 This project provides a reproducible experimental framework combining model benchmarking, SHAP-based interpretability, feature ablation, and simulated measurement-noise evaluation on a publicly available water-potability dataset. The experiments provide quantitative evidence regarding model performance, feature reduction, and sensitivity to the specified noise model.
