@@ -1,0 +1,9 @@
+Statistic,Value
+Total samples,3276
+Features,9
+Not Potable (class 0),1998
+Potable (class 1),1278
+Class ratio 0:1,1.56:1
+Features with missing,3
+Total missing cells,1434
+Missing rate (%),4.86

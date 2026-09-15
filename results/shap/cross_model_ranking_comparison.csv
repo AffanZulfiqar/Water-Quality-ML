@@ -1,0 +1,10 @@
+rank,LogisticRegression,SVM,MLP
+1,Solids,Sulfate,Sulfate
+2,ph,ph,ph
+3,Chloramines,Hardness,Hardness
+4,Organic_carbon,Solids,Solids
+5,Conductivity,Chloramines,Chloramines
+6,Turbidity,Conductivity,Trihalomethanes
+7,Hardness,Trihalomethanes,Conductivity
+8,Trihalomethanes,Turbidity,Turbidity
+9,Sulfate,Organic_carbon,Organic_carbon

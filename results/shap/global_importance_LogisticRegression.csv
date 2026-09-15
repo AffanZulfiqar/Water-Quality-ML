@@ -1,0 +1,10 @@
+feature,mean_abs_shap,model,rank
+Solids,0.009544117059764547,LogisticRegression,1
+ph,0.008908637264183067,LogisticRegression,2
+Chloramines,0.00499746534166061,LogisticRegression,3
+Organic_carbon,0.004976168121558432,LogisticRegression,4
+Conductivity,0.004769386363150133,LogisticRegression,5
+Turbidity,0.0027802420336035727,LogisticRegression,6
+Hardness,0.002685491727316006,LogisticRegression,7
+Trihalomethanes,0.0023598998776601515,LogisticRegression,8
+Sulfate,0.0018945931037245053,LogisticRegression,9

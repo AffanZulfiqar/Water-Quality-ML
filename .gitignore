@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env
+
+# Dataset files (download separately — see data/README.md)
+data/*.csv
+data/*.zip
+data/*.xlsx
+
+# Trained model files (too large for git; use DVC or download links)
+results/models/*.pkl
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Kaggle credentials
+kaggle.json
+.kaggle/
+
+# Experiment outputs (tracked in results/ but not large binaries)
+results/models/*.pkl
+results/shap/*.npy
+
+# Environment files with secrets
+.env
+*.env

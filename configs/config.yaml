@@ -1,0 +1,158 @@
+# Project: Explainable and Robust ML for Water Quality Assessment
+# Configuration File
+# All experiments use settings defined here. Do not hard-code these values in scripts.
+
+# ─────────────────────────────────────────
+# Reproducibility
+# ─────────────────────────────────────────
+random_seed: 42
+
+# ─────────────────────────────────────────
+# Dataset Paths
+# ─────────────────────────────────────────
+data:
+  primary_dataset: "data/water_potability.csv"
+  # If you have downloaded the dataset manually, place it at the path above.
+  # Download URL: https://www.kaggle.com/datasets/adityakadiwal/water-potability
+  # License: CC0 Public Domain
+  target_column: "Potability"
+  positive_class: 1           # 1 = Potable
+  negative_class: 0           # 0 = Not Potable
+
+# ─────────────────────────────────────────
+# Train / Validation / Test Split
+# ─────────────────────────────────────────
+splitting:
+  test_size: 0.15             # 15% held-out test set
+  validation_size: 0.15       # 15% validation set (from remaining training data)
+  stratified: true
+
+# ─────────────────────────────────────────
+# Cross-Validation
+# ─────────────────────────────────────────
+cross_validation:
+  n_splits: 5
+  strategy: "StratifiedKFold"
+  scoring: "f1_macro"
+
+# ─────────────────────────────────────────
+# Preprocessing
+# ─────────────────────────────────────────
+preprocessing:
+  missing_value_strategy: "median"   # Options: mean, median, knn
+  remove_duplicates: true
+  outlier_handling: "iqr_cap"        # Cap outliers at IQR 1.5x fence; options: none, iqr_cap, iqr_remove
+  scaler: "StandardScaler"           # Options: StandardScaler, RobustScaler, MinMaxScaler, none
+  imbalance_strategy: "class_weight" # Options: class_weight, smote, none
+
+# ─────────────────────────────────────────
+# Feature Ablation Configurations
+# ─────────────────────────────────────────
+ablation:
+  configurations:
+    A: "all"          # All available features
+    B: 7              # Top 7 features by training-set SHAP importance
+    C: 5              # Top 5 features
+    D: 3              # Top 3 features
+    E: ["pH", "Turbidity", "Conductivity"]  # Proxy for low-cost/easy-to-measure sensors
+
+# ─────────────────────────────────────────
+# Robustness Experiment
+# ─────────────────────────────────────────
+robustness:
+  noise_levels: [0.0, 0.02, 0.05, 0.10, 0.15]   # Proportional (multiplicative) noise std
+  noise_model: "multiplicative_gaussian"           # x_noisy = x * (1 + N(0, noise_level))
+  n_repetitions: 5                                 # Repeat each noise level N times, average
+  models_to_test: ["RandomForest", "XGBoost", "LightGBM", "LogisticRegression", "SVM"]
+
+# ─────────────────────────────────────────
+# Hyperparameter Search
+# ─────────────────────────────────────────
+hyperparameter_optimization:
+  method: "RandomizedSearchCV"   # Options: RandomizedSearchCV, optuna
+  n_iter: 50
+  cv_folds: 5
+  scoring: "f1_macro"
+  models_to_tune: ["RandomForest", "XGBoost", "LightGBM"]
+
+# ─────────────────────────────────────────
+# Model Settings (default parameters)
+# ─────────────────────────────────────────
+models:
+  LogisticRegression:
+    C: 1.0
+    max_iter: 1000
+    class_weight: "balanced"
+  DecisionTree:
+    max_depth: 6
+    min_samples_leaf: 10
+    class_weight: "balanced"
+  RandomForest:
+    n_estimators: 200
+    max_depth: null
+    min_samples_leaf: 5
+    class_weight: "balanced"
+    n_jobs: -1
+  SVM:
+    C: 1.0
+    kernel: "rbf"
+    gamma: "scale"
+    class_weight: "balanced"
+    probability: true
+  XGBoost:
+    n_estimators: 300
+    max_depth: 6
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    scale_pos_weight: 1.5   # approximate class ratio
+    use_label_encoder: false
+    eval_metric: "logloss"
+  LightGBM:
+    n_estimators: 300
+    max_depth: -1
+    learning_rate: 0.05
+    num_leaves: 31
+    class_weight: "balanced"
+    n_jobs: -1
+    verbosity: -1
+  MLP:
+    hidden_layer_sizes: [128, 64, 32]
+    activation: "relu"
+    max_iter: 500
+    early_stopping: true
+    validation_fraction: 0.1
+
+# ─────────────────────────────────────────
+# SHAP Settings
+# ─────────────────────────────────────────
+shap:
+  background_samples: 100          # For KernelSHAP background dataset size
+  max_display: 9                   # Number of features shown in summary plots
+  local_examples:
+    n_correct: 2
+    n_fp: 2
+    n_fn: 2
+    n_high_confidence: 2
+
+# ─────────────────────────────────────────
+# Visualization Settings
+# ─────────────────────────────────────────
+visualization:
+  figure_dpi: 150
+  figure_format: "png"
+  style: "seaborn-v0_8-whitegrid"
+  color_palette: "viridis"
+  figsize_default: [10, 7]
+
+# ─────────────────────────────────────────
+# Results Output Paths
+# ─────────────────────────────────────────
+results:
+  metrics: "results/metrics/"
+  models: "results/models/"
+  figures: "results/figures/"
+  tables: "results/tables/"
+  shap: "results/shap/"
+  ablation: "results/ablation/"
+  robustness: "results/robustness/"
