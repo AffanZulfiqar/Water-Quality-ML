@@ -247,14 +247,14 @@ for mname in tree_keys+["LogisticRegression","SVM","MLP"]:
     try:
         if mname in tree_keys:
             explainer=shap.TreeExplainer(model)
-            sv=explainer.shap_values(X_test_s)
+            sv=explainer.shap_values(X_train_s)
             if isinstance(sv,list): sv=sv[1]
         else:
             bg_idx=np.random.default_rng(SEED).choice(len(X_train_s),80,replace=False)
             bg=X_train_s.iloc[bg_idx]
             def _pred(x,_m=model): return _m.predict_proba(pd.DataFrame(x,columns=FEATURES))[:,1]
             explainer=shap.KernelExplainer(_pred,bg)
-            sv=explainer.shap_values(X_test_s.iloc[:100])
+            sv=explainer.shap_values(X_train_s.iloc[:100])
 
         ma=np.abs(sv).mean(axis=0)
         imp=pd.DataFrame({"feature":FEATURES,"mean_abs_shap":ma,"model":mname}).sort_values("mean_abs_shap",ascending=False).reset_index(drop=True)

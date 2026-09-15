@@ -13,7 +13,7 @@
 
 | Criterion | Assessment |
 |-----------|-----------|
-| **Physicochemical features** | ✅ Contains 9 physicochemical variables: pH, Hardness, TDS, Chloramines, Sulfate, Conductivity, Organic Carbon, THMs, Turbidity |
+| **Physicochemical features** | ✅ Contains 9 physicochemical variables: pH, Hardness, Solids (TDS-related measure), Chloramines, Sulfate, Conductivity, Organic Carbon, THMs, Turbidity |
 | **Binary potability target** | ✅ Directly aligns with RQ1 |
 | **Publicly accessible** | ✅ CC0, no redistribution restrictions |
 | **Class imbalance** | ⚠️ Mild (~61/39); manageable with `class_weight="balanced"` |
@@ -68,11 +68,11 @@ Dummy, Logistic Regression, Decision Tree, Random Forest, SVM, XGBoost, MLP.
 - Secondary metrics: ROC-AUC, PR-AUC, Accuracy (reported with caveats regarding imbalance)
 
 ### SHAP Analysis
-- KernelSHAP for generalized feature importance
-- Global: mean \|SHAP\| per feature used for establishing the baseline feature ranking.
+- KernelSHAP for generalized feature importance; TreeSHAP for ensemble models.
+- Global: mean \|SHAP\| per feature used for establishing the baseline feature ranking. Crucially, this ranking was derived strictly from the **training data** to prevent test-set selection bias (data leakage) in subsequent ablation experiments.
 
 ### Feature Ablation (RQ3)
-Using the feature ranking derived from the baseline SHAP analysis, models were retrained from scratch on 5 configurations (All, Top-7, Top-5, Top-3, Low-cost). 
+Using the feature ranking derived from the training-set SHAP analysis, models were retrained from scratch on 5 configurations (All, Top-7, Top-5, Top-3, Low-cost). 
 
 ### Noise Robustness (RQ4)
 Multiplicative Gaussian noise at {0%, 2%, 5%, 10%, 15%} applied to test features. 5 random repetitions per level; results averaged.
@@ -81,7 +81,7 @@ Multiplicative Gaussian noise at {0%, 2%, 5%, 10%, 15%} applied to test features
 
 ## E. Best Model (Results)
 
-After evaluating all models on the held-out test set, **Random Forest** achieved the best overall classification balance. Given the noisy nature of this dataset and uncertain label provenance, absolute performance ceilings are moderate. 
+After evaluating all models on the held-out test set, given the noisy nature of this dataset and uncertain label provenance, absolute performance ceilings are moderate. 
 
 | Model | Accuracy | Macro F1 | ROC-AUC |
 |-------|----------|----------|---------|
@@ -92,7 +92,7 @@ After evaluating all models on the held-out test set, **Random Forest** achieved
 | **SVM** | 0.6220 | 0.6043 | 0.6534 |
 | **Logistic Regression** | 0.5183 | 0.5097 | 0.5074 |
 
-*Note on metrics:* While accuracy ranges up to 68.3%, Macro F1 (64.4%) provides a more honest assessment of the model's predictive capability across both the majority and minority classes. Random Forest and XGBoost outperformed the linear baseline, suggesting that the decision boundary for this dataset relies on non-linear feature interactions.
+*Note on metrics:* While accuracy ranges up to 68.3%, Macro F1 (64.4%) provides a more honest assessment of the model's predictive capability across both the majority and minority classes. Random Forest achieved the highest Macro F1 and ROC-AUC among the evaluated models. Both Random Forest and XGBoost outperformed the linear baseline, suggesting that nonlinear relationships and feature interactions may be important for this dataset.
 
 ---
 
@@ -101,13 +101,13 @@ After evaluating all models on the held-out test set, **Random Forest** achieved
 Using KernelSHAP, we extracted the most globally important features for the linear and neural baseline models. 
 
 For the linear baseline (Logistic Regression), the top 5 most important features were:
-1. **Solids (TDS)** 
+1. **Solids (TDS-related measure)** 
 2. **pH** 
 3. **Chloramines**
 4. **Organic Carbon**
 5. **Conductivity**
 
-For the MLP Neural Network, **Sulfate** and **Solids** were highly dominant. 
+For the MLP Neural Network, **Sulfate** and **Solids (TDS-related measure)** were highly dominant. 
 
 **Critical note:** SHAP values measure model-learned associations. They do not establish that any feature *causes* poor water quality; they merely indicate which variables the model relies on most heavily to minimize loss on this specific dataset.
 
@@ -117,22 +117,22 @@ For the MLP Neural Network, **Sulfate** and **Solids** were highly dominant.
 
 We systematically reduced the number of features provided to the Random Forest model and observed the impact on Macro F1:
 
-| Configuration | Features Used | Macro F1 | ROC-AUC | % of Full Performance |
-|---------------|---------------|----------|---------|------------------------|
+| Configuration | Features Used | Macro F1 | ROC-AUC | % of Full Macro F1 |
+|---------------|---------------|----------|---------|--------------------|
 | **A: Full** | 9 | 0.6444 | 0.6992 | 100% |
-| **B: Top 7** | 7 | **0.6514** | 0.6881 | **101%** |
+| **B: Top 7** | 7 | **0.6514** | 0.6881 | 101% |
 | **C: Top 5** | 5 | 0.6294 | 0.6818 | 97.6% |
 | **D: Top 3** | 3 | 0.5633 | 0.5908 | 87.4% |
 | **E: Low-Cost** | 2 (pH, Turbidity) | 0.4452 | 0.4458 | 69.1% |
 
 **Conclusion:** 
-The model performed slightly better (Macro F1 0.6514 vs 0.6444) when the two lowest-ranked features were removed, suggesting minor overfitting to noisy parameters. Furthermore, retaining only 5 sensors preserved ~97.6% of the full-feature classification capability. While not a substitute for certified laboratory testing, this demonstrates that reduced-parameter continuous monitoring systems could potentially achieve comparable predictive value to full-suite monitoring in resource-constrained IoT deployments.
+The Top-7 configuration achieved a slightly higher Macro F1 than the full feature set (0.6514 vs. 0.6444), although its ROC-AUC was slightly lower (0.6881 vs. 0.6992). The Top-5 configuration achieved a Macro F1 of 0.6294, corresponding to approximately 97.6% of the full-feature Macro F1 while reducing the input variables from nine to five. These results suggest that some feature reduction may be possible without a large loss in predictive performance. However, the experiment does not directly establish sensor-cost savings or field-level monitoring performance.
 
 ---
 
 ## H. Robustness Findings
 
-We applied simulated Gaussian multiplicative sensor noise (0% to 15%) to the test set features to simulate real-world hardware variance:
+We applied simulated Gaussian multiplicative measurement noise (0% to 15%) to the test set features to simulate real-world hardware variance:
 
 | Noise Level | Random Forest | XGBoost | Logistic Regression | SVM |
 |-------------|---------------|---------|----------------------|-----|
@@ -143,48 +143,17 @@ We applied simulated Gaussian multiplicative sensor noise (0% to 15%) to the tes
 | **15% Noise** | 0.6494 | 0.6390 | 0.5022 | 0.5980 |
 
 **Conclusion:** 
-The tree-based models (Random Forest and XGBoost) demonstrated substantial resilience to multiplicative noise. Random Forest's performance showed marginal positive fluctuations under 2%, 5%, and 10% measurement noise (peaking at Macro F1 0.6576), suggesting that the tree ensemble was not strictly memorizing exact feature values and may have benefited from slight stochastic perturbation during evaluation.
+Random Forest and XGBoost showed relatively stable Macro F1 under the simulated multiplicative-noise conditions. Random Forest increased from 0.6444 at 0% noise to 0.6576 at 10% noise before decreasing to 0.6494 at 15%, while XGBoost remained within a relatively narrow range across the tested noise levels. These results indicate limited sensitivity to the specific simulated noise model used in this experiment; they should not be interpreted as evidence of robustness to real-world sensor errors.
 
 ---
 
-## I. Limitations
+## I. Research Contribution and Limitations
 
-### Dataset limitations
-- Uncertain data provenance; not from a certified monitoring program.
-- No geographic, temporal, or water-source metadata.
+### Research Contribution
+This project provides a reproducible experimental framework combining model benchmarking, SHAP-based interpretability, feature ablation, and simulated measurement-noise evaluation on a publicly available water-potability dataset. The experiments provide quantitative evidence regarding model performance, feature reduction, and sensitivity to the specified noise model.
 
-### Methodological limitations
-- Noise model is simplified multiplicative Gaussian — does not capture structural sensor drift, biofouling, or long-term calibration decay.
-- Feature ablation relied on a single SHAP consensus ranking; a recursive elimination approach could yield a different optimal subset.
-
-### Scope limitations
-- Binary classification only; no continuous Water Quality Index (WQI) prediction.
-- Static dataset; no temporal or concept-drift analysis.
-
----
-
-## J. Publication Assessment
-
-### Portfolio quality
-**Strong** — this project demonstrates:
-- Research problem framing with appropriate literature grounding
-- Leakage-free ML pipeline engineering
-- Imbalance-aware evaluation methodology
-- Structured experimental design (ablation, robustness)
-
-This provides a highly defensible, quantitative project for MS/PhD program applications.
-
-### Conference paper potential
-**Conditional** — the framework is sound, but claims must remain strictly bounded by the dataset's limitations.
-1. ✅ Framework design: strong
-2. ✅ Methodology: rigorous and reproducible
-3. ✅ Results: Complete, demonstrating non-linear superiority, 5-sensor optimization curve, and tree-noise resilience.
-4. ❌ External validation: no second dataset identified — a notable weakness for top-tier venues, but acceptable for workshops if clearly stated.
-
-**Realistic target venues**:
-- IEEE SSCI or IJCNN (workshop/short paper)
-- Environmental Data Science (Cambridge Open Access)
-- Water (MDPI Open Access)
+### Current Limitations for Publication
+The main limitations are the uncertain provenance of the dataset, absence of external validation, reliance on a single dataset, simplified noise assumptions, and the lack of temporal or field-sensor data. Further validation on independently collected water-quality datasets would strengthen the generalizability of the findings.
 
 ---
 
