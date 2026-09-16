@@ -18,7 +18,7 @@
 | **Publicly accessible** | CC0, no redistribution restrictions |
 | **Class imbalance** | Mild (~61/39); manageable with `class_weight="balanced"` |
 | **Missing values** | pH (15%), Sulfate (24%), THMs (5%); imputable but documented |
-| **Data provenance** | Not certified; uncertain primary source |
+| **Data provenance** | Standard Kaggle benchmark dataset; specific geographic source not documented |
 | **Sample size** | 3,276 rows — sufficient for classical ML |
 
 ---
