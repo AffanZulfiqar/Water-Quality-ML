@@ -166,6 +166,16 @@ This project provides a reproducible experimental framework combining model benc
 ### Reproducibility
 All preprocessing, model training, feature-ranking, ablation, and noise experiments were performed using fixed random seeds and training-derived preprocessing statistics. The experimental pipeline was designed to prevent information from the held-out test set from influencing model selection or feature selection.
 
+
+### External Domain-Shift Analysis
+Does a reduced five-parameter model learned from the public potability dataset behave similarly when exposed to independently collected real-world measurements?
+
+To evaluate model transferability, an independent set of water quality observations was obtained from the U.S. Geological Survey (USGS) Water Quality Portal (WQP). A total of 200 samples containing complete measurements for five overlapping parameters (pH, Total dissolved solids, Sulfate, Specific conductance, Turbidity) were extracted from Washington State (2020-2024).
+
+A dedicated 5-feature Random Forest model was trained on the original dataset. Because the independent WQP observations do not contain the study's binary potability ground truth, this experiment is not treated as predictive accuracy validation. Instead, it evaluates prediction behavior under distributional shift. 
+
+The model successfully generated predictions on the WQP data without numerical instability. A comparison of SHAP feature importances between the original dataset and the external WQP dataset demonstrates how the model's reliance on specific physicochemical properties shifts when exposed to real-world domain distributions.
+
 ### Dataset provenance and external validity
 The study uses a publicly available water-potability dataset whose original measurement provenance is not fully documented. Therefore, the experiments are interpreted as a methodological evaluation rather than evidence of deployment-ready water-safety prediction. The study focuses on comparing model behavior, feature importance, feature reduction, and robustness under controlled perturbations within the evaluated dataset.
 
@@ -175,6 +185,7 @@ Further validation using independently collected laboratory measurements or geog
 The main limitations are the uncertain provenance of the dataset, absence of external validation, reliance on a single dataset, simplified noise assumptions, and the lack of temporal or field-sensor data. Further validation on independently collected water-quality datasets would strengthen the generalizability of the findings.
 
 ---
+
 
 
 
