@@ -1,5 +1,5 @@
 # Final Research Report
-## Explainable and Robust Machine Learning for Water Quality Assessment and Reduced-Parameter Monitoring
+## Explainable and Robust Machine Learning for Water Quality Assessment and Feature Reduction
 
 ---
 
@@ -31,7 +31,7 @@
 - Evaluates noise robustness for air quality and general environmental ML
 
 ### What this project investigates:
-This study integrates model benchmarking, SHAP analysis, feature ablation, and noise robustness evaluation within a unified experimental framework. It aims to provide a reproducible, leakage-free benchmark for the widely used Kaggle potability dataset, while exploring the consistency of SHAP-derived feature importances and the sensitivity of tree ensembles to multiplicative measurement noise.
+This study integrates model benchmarking, SHAP analysis, feature ablation, and measurement-noise sensitivity analysis within a unified experimental framework. It aims to provide a reproducible, leakage-free benchmark for the widely used Kaggle water-potability dataset while examining the consistency of SHAP-derived feature importance and the sensitivity of different model families to simulated multiplicative measurement noise.
 
 ---
 
@@ -162,6 +162,9 @@ Taken together, the experiments demonstrate a reproducible framework for evaluat
 
 ### Research Contribution
 This project provides a reproducible experimental framework combining model benchmarking, SHAP-based interpretability, feature ablation, and simulated measurement-noise evaluation on a publicly available water-potability dataset. The experiments provide quantitative evidence regarding model performance, feature reduction, and sensitivity to the specified noise model.
+
+### Reproducibility
+All preprocessing, model training, feature-ranking, ablation, and noise experiments were performed using fixed random seeds and training-derived preprocessing statistics. The experimental pipeline was designed to prevent information from the held-out test set from influencing model selection or feature selection.
 
 ### Current Limitations for Publication
 The main limitations are the uncertain provenance of the dataset, absence of external validation, reliance on a single dataset, simplified noise assumptions, and the lack of temporal or field-sensor data. Further validation on independently collected water-quality datasets would strengthen the generalizability of the findings.

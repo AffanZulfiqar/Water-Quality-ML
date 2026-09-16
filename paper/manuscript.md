@@ -1,4 +1,4 @@
-# Explainable and Robust Machine Learning for Water Quality Assessment and Reduced-Parameter Monitoring
+# Explainable and Robust Machine Learning for Water Quality Assessment and Feature Reduction
 
 ---
 
