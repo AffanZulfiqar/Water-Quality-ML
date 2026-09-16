@@ -1,4 +1,4 @@
-# Explainable and Robust Machine Learning for Water Quality Assessment and Feature Reduction
+# Explainable ML for Water Potability Classification and Reduced-Parameter Monitoring
 
 A complete, reproducible research project investigating machine learning for drinking water potability classification, with SHAP-based explainability, feature ablation, and noise-robustness experiments.
 
@@ -15,7 +15,7 @@ A complete, reproducible research project investigating machine learning for dri
 | **RQ1** | How accurately can different ML models classify water potability from physicochemical parameters? |
 | **RQ2** | Which physicochemical parameters most strongly influence potability predictions, and are these consistent across models? |
 | **RQ3** | How does reducing the number of measured parameters affect predictive performance? |
-| **RQ4** | How robust are the developed models to realistic measurement noise? |
+| **RQ4** | How robust are the developed models to controlled measurement-noise perturbations? |
 
 ---
 
@@ -284,5 +284,6 @@ If you use this code or research in your work:
 This project uses the Water Potability dataset released by Aditya Kadiwal on Kaggle under the CC0 Public Domain license. The project was independently conducted using publicly available data and tools.
 
 ---
+
 
 

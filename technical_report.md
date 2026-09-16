@@ -1,5 +1,5 @@
 # Final Research Report
-## Explainable and Robust Machine Learning for Water Quality Assessment and Feature Reduction
+## Explainable ML for Water Potability Classification and Reduced-Parameter Monitoring
 
 ---
 
@@ -42,7 +42,7 @@ This study integrates model benchmarking, SHAP analysis, feature ablation, and m
 | **RQ1** | How accurately can different ML models classify water potability from physicochemical parameters? |
 | **RQ2** | Which physicochemical parameters most strongly influence potability predictions, and are these consistent across model families? |
 | **RQ3** | How does reducing the number of measured parameters affect predictive performance? |
-| **RQ4** | How robust are the developed models to realistic measurement noise? |
+| **RQ4** | How robust are the developed models to controlled measurement-noise perturbations? |
 
 ---
 
@@ -166,9 +166,15 @@ This project provides a reproducible experimental framework combining model benc
 ### Reproducibility
 All preprocessing, model training, feature-ranking, ablation, and noise experiments were performed using fixed random seeds and training-derived preprocessing statistics. The experimental pipeline was designed to prevent information from the held-out test set from influencing model selection or feature selection.
 
+### Dataset provenance and external validity
+The study uses a publicly available water-potability dataset whose original measurement provenance is not fully documented. Therefore, the experiments are interpreted as a methodological evaluation rather than evidence of deployment-ready water-safety prediction. The study focuses on comparing model behavior, feature importance, feature reduction, and robustness under controlled perturbations within the evaluated dataset.
+
+Further validation using independently collected laboratory measurements or geographically distinct monitoring datasets is required before the proposed approach can be generalized to real-world water-quality monitoring.
+
 ### Current Limitations for Publication
 The main limitations are the uncertain provenance of the dataset, absence of external validation, reliance on a single dataset, simplified noise assumptions, and the lack of temporal or field-sensor data. Further validation on independently collected water-quality datasets would strengthen the generalizability of the findings.
 
 ---
+
 
 

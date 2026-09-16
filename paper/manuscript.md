@@ -1,4 +1,4 @@
-# Explainable and Robust Machine Learning for Water Quality Assessment and Feature Reduction
+# Explainable ML for Water Potability Classification and Reduced-Parameter Monitoring
 
 ---
 
@@ -268,3 +268,4 @@ Key findings:
 ---
 
 *Manuscript status: DRAFT — experiments pending. Do not submit or share until all result placeholders are replaced with actual experimental values.*
+
