@@ -13,13 +13,13 @@
 
 | Criterion | Assessment |
 |-----------|-----------|
-| **Physicochemical features** | ✅ Contains 9 physicochemical variables: pH, Hardness, Solids (TDS-related measure), Chloramines, Sulfate, Conductivity, Organic Carbon, THMs, Turbidity |
-| **Binary potability target** | ✅ Directly aligns with RQ1 |
-| **Publicly accessible** | ✅ CC0, no redistribution restrictions |
-| **Class imbalance** | ⚠️ Mild (~61/39); manageable with `class_weight="balanced"` |
-| **Missing values** | ⚠️ pH (15%), Sulfate (24%), THMs (5%); imputable but documented |
-| **Data provenance** | ⚠️ Not certified; uncertain primary source |
-| **Sample size** | ⚠️ 3,276 rows — sufficient for classical ML |
+| **Physicochemical features** | Contains 9 physicochemical variables: pH, Hardness, Solids (TDS-related measure), Chloramines, Sulfate, Conductivity, Organic Carbon, THMs, Turbidity |
+| **Binary potability target** | Directly aligns with RQ1 |
+| **Publicly accessible** | CC0, no redistribution restrictions |
+| **Class imbalance** | Mild (~61/39); manageable with `class_weight="balanced"` |
+| **Missing values** | pH (15%), Sulfate (24%), THMs (5%); imputable but documented |
+| **Data provenance** | Not certified; uncertain primary source |
+| **Sample size** | 3,276 rows — sufficient for classical ML |
 
 ---
 
