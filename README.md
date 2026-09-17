@@ -4,7 +4,7 @@ A complete, reproducible research project investigating machine learning for dri
 
 > **Motivation:** This research project was motivated by practical exposure to water-filtration challenges during the author's work with Porteco, a water-filtration startup. The experimental study itself uses publicly available datasets and is an independent research project.
 
-> ⚠️ **Research Prototype:** Models in this project are research tools trained on a public dataset of uncertain provenance. They are **not** certified water safety systems and must not be used to make decisions about drinking water safety.
+> **Research Prototype:** Models in this project are research tools trained on a public dataset of uncertain provenance. They are **not** certified water safety systems and must not be used to make decisions about drinking water safety.
 
 ---
 
